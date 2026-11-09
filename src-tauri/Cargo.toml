@@ -1,6 +1,6 @@
 [package]
 name = "totalmd"
-version = "0.2.0"
+version = "0.2.1"
 description = "Visor y editor de Markdown con soporte completo para diagramas Mermaid"
 authors = ["Abraham"]
 license = "MIT"
