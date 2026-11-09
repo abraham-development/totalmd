@@ -5,10 +5,10 @@
   html, body { height: auto; overflow: visible; background: #fff !important; }
   body { display: block; }
 
-  #toolbar, #tabbar, #conflict-bar, #findbar, #sidebar, .resizer,
+  #toolbar, #tabbar, #conflict-bar, #findbar, #sidebar-col, .resizer,
   #editor-pane, #statusbar, #welcome, #toast, .mermaid-tools { display: none !important; }
 
-  #main, #workspace, #preview-pane { display: block !important; overflow: visible !important; height: auto !important; }
+  #content-col, #workspace, #preview-pane { display: block !important; overflow: visible !important; height: auto !important; }
 
   :root, :root[data-theme="dark"] {
     --md-bg: #fff; --md-fg: #1f2328; --md-muted: #59636e; --md-border: #d1d9e0; --md-border-soft: #d1d9e0;

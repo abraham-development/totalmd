@@ -158,16 +158,21 @@ pub fn run() {
         selftest: args.iter().any(|a| a == "--selftest"),
     };
 
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default();
+    // La autoprueba corre aparte aunque el usuario tenga TotalMD abierta.
+    if !startup.selftest {
         // Debe registrarse primero: un segundo lanzamiento entrega sus archivos a esta ventana.
-        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             let files = collect_files(&argv, Path::new(&cwd));
             let _ = app.emit("open-files", files);
             if let Some(w) = app.get_webview_window("main") {
                 let _ = w.unminimize();
                 let _ = w.set_focus();
             }
-        }))
+        }));
+    }
+
+    builder
         .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())

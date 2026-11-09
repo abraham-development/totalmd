@@ -94,6 +94,8 @@ function setZoom(z: number): void {
 function applyLayout(): void {
   document.body.classList.toggle("no-sidebar", !settings.sidebar);
   document.documentElement.style.setProperty("--split", String(settings.splitRatio));
+  // Los botones de archivo viven arriba de la barra lateral; si se oculta, pasan a la barra superior.
+  $(settings.sidebar ? ".sidebar-top" : ".toolbar-left").append($(".file-actions"));
 }
 
 function makeResizer(handle: HTMLElement, onMove: (e: PointerEvent) => void, onEnd: () => void): void {
@@ -868,6 +870,14 @@ async function runSelftest(): Promise<void> {
       await shot(`${i}-oscuro-dividido`);
       settings.theme = original;
       await applyTheme();
+
+      // Barra lateral oculta, sin guardar el ajuste.
+      const sidebar = settings.sidebar;
+      settings.sidebar = false;
+      applyLayout();
+      await shot(`${i}-sin-lateral`);
+      settings.sidebar = sidebar;
+      applyLayout();
     }
   }
   await api.exitApp(failures ? 1 : 0);

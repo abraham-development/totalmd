@@ -3,6 +3,7 @@
   --zoom: 1;
   --split: 0.5;
   --sidebar-w: 250px;
+  --topbar-h: 44px;
   --font-ui: Ubuntu, "Noto Sans", Cantarell, "DejaVu Sans", system-ui, sans-serif;
 
   --bg: #ffffff;
@@ -55,11 +56,11 @@ html, body {
   font: 14px/1.4 var(--font-ui);
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
-body > header, body > nav, body > div, body > footer { flex: none; }
+/* Dos columnas a altura completa: barra lateral | contenido. */
+body { display: flex; }
+
+#content-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+#content-col > header, #content-col > nav, #content-col > div, #content-col > footer { flex: none; }
 
 button {
   font: inherit;
@@ -80,18 +81,24 @@ button.danger { color: var(--danger); }
 svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 /* ── Barra de herramientas ── */
-#toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 6px 8px;
-  background: var(--bg-chrome);
+/* Misma altura y borde que .sidebar-top: las dos líneas horizontales quedan alineadas. */
+#toolbar, .sidebar-top {
+  height: var(--topbar-h);
+  padding: 0 8px;
   border-bottom: 1px solid var(--border);
   user-select: none;
 }
-#toolbar .group { display: flex; align-items: center; gap: 2px; }
-#toolbar .group > button, .menu-wrap > button { display: flex; align-items: center; padding: 6px 8px; }
+#toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-chrome);
+}
+.toolbar-left { display: flex; align-items: center; min-width: 0; }
+#toolbar > .group:last-child { justify-self: end; }
+.group { display: flex; align-items: center; gap: 2px; }
+.group > button, .menu-wrap > button { display: flex; align-items: center; padding: 6px 8px; }
 
 .segmented { background: var(--bg-hover); border-radius: 8px; padding: 2px !important; }
 .segmented button { display: flex; align-items: center; gap: 6px; padding: 4px 12px !important; }
@@ -172,19 +179,26 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 }
 #find-input.not-found { border-color: var(--danger); }
 
-/* ── Área principal ── */
-#main { flex: 1; display: flex; min-height: 0; }
-
-#sidebar {
+/* ── Barra lateral ── */
+#sidebar-col {
   width: var(--sidebar-w);
   flex: none;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--bg-alt);
+}
+.sidebar-top { display: flex; align-items: center; flex: none; }
+
+#sidebar {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   font-size: 13px;
   user-select: none;
   padding-bottom: 16px;
 }
-.no-sidebar #sidebar, .no-sidebar #sidebar-resizer { display: none; }
+.no-sidebar #sidebar-col, .no-sidebar #sidebar-resizer { display: none; }
 
 .resizer { flex: none; width: 5px; cursor: col-resize; background: var(--border); background-clip: content-box; padding: 0 2px; }
 .resizer:hover, .resizing .resizer { background-color: var(--accent); padding: 0 1px; }
@@ -219,7 +233,7 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 .tree-row .hint { margin-left: auto; padding-left: 8px; color: var(--fg-muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── Espacio de trabajo y modos ── */
-#workspace { flex: 1; display: flex; min-width: 0; position: relative; }
+#workspace { flex: 1; display: flex; min-width: 0; min-height: 0; position: relative; }
 #editor-pane { min-width: 0; overflow: hidden; background: var(--bg); }
 #preview-pane { min-width: 0; overflow: auto; background: var(--bg); scroll-behavior: auto; }
 #editor-pane .cm-editor { height: 100%; }
