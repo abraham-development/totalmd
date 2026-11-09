@@ -1,106 +1,102 @@
 # TotalMD
 
-Visor y editor de escritorio para **Markdown** (`.md`) con soporte completo de **Mermaid**: diagramas embebidos en bloques ```` ```mermaid ```` y archivos `.mmd` sueltos. Hecho con Tauri 2 (Rust) sobre el WebKitGTK del sistema, pensado para Ubuntu 26.04 / GNOME.
+**Visor y editor de documentos Markdown con diagramas Mermaid, para Ubuntu.**
 
-## Funciones
+Abre tus archivos `.md` y míralos tal como se ven en GitHub: con títulos, tablas, código, fórmulas y **diagramas Mermaid dibujados**. También abre archivos `.mmd` (diagramas sueltos) y te deja editarlos con la vista previa al lado.
 
-- **3 modos:** Vista (`Ctrl+1`), Edición (`Ctrl+2`) y Dividido con vista previa en vivo y scroll sincronizado (`Ctrl+3`).
-- **Copiar bloques de código** con un clic: cada bloque muestra su lenguaje y un botón «Copiar».
-- **Mermaid:** flowchart, secuencia, clases, estados, ER, Gantt, pie, mindmap, timeline, gitGraph y el resto de tipos. Los diagramas con errores muestran el mensaje en línea sin romper la app. Botones para ampliar (zoom/pan), copiar el código y exportar SVG/PNG. Doble clic sobre un diagrama lo amplía.
-- **Markdown completo:** GFM (tablas, tareas clicables, tachado, autoenlaces), notas al pie, emojis, front matter, fórmulas KaTeX, resaltado de código, imágenes relativas.
-- **Pestañas, barra lateral con el árbol de la carpeta y archivos recientes.** La sesión se restaura al abrir la app.
-- **Recarga automática** si el archivo cambia en disco. Si tienes cambios sin guardar, aparece un aviso de conflicto.
-- **Exportar:** HTML autónomo, PDF (vía impresión), SVG/PNG por diagrama.
-- Guardado atómico, respeta los finales de línea CRLF, tema claro/oscuro/sistema, zoom, arrastrar y soltar.
+![TotalMD mostrando un diagrama de flujo](docs/captura-diagrama.png)
 
-## Atajos
+## Instalar
 
-| Acción | Atajo |
-|---|---|
-| Nuevo / Abrir / Abrir carpeta | `Ctrl+N` / `Ctrl+O` / `Ctrl+Mayús+O` |
-| Guardar / Guardar como | `Ctrl+S` / `Ctrl+Mayús+S` |
-| Cerrar pestaña / cambiar de pestaña | `Ctrl+W` / `Ctrl+Tab`, `Ctrl+RePág/AvPág` |
-| Vista / Edición / Dividido / alternar | `Ctrl+1` / `Ctrl+2` / `Ctrl+3` / `Ctrl+E` |
-| Barra lateral | `Ctrl+B` |
-| Buscar | `Ctrl+F` (en la vista: `Enter`/`Mayús+Enter`) |
-| Imprimir / PDF | `Ctrl+P` |
-| Zoom | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` |
-
-## Desarrollo
-
-Requisitos (una vez):
-
-```bash
-sudo apt install libwebkit2gtk-4.1-dev librsvg2-dev libxdo-dev libayatana-appindicator3-dev file
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh   # Rust
-pnpm install
-```
-
-```bash
-pnpm tauri dev                       # app con recarga en caliente
-pnpm dev                             # solo la interfaz en el navegador (http://localhost:1420)
-pnpm typecheck                       # TypeScript
-cd src-tauri && cargo clippy         # Rust
-```
-
-Autoprueba de renderizado (abre, renderiza, informa por consola y sale):
-
-```bash
-src-tauri/target/release/totalmd --selftest samples/ejemplo-completo.md samples/diagrama.mmd
-```
-
-## Instalación
-
-En Ubuntu 26.04 (o Debian, Linux Mint, Pop!_OS… en x86_64) basta un comando:
+Abre una terminal (`Ctrl+Alt+T`), pega este comando y pulsa Enter:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/abraham-development/totalmd/main/install.sh | bash
 ```
 
-Descarga la última versión desde [Releases](https://github.com/abraham-development/totalmd/releases), la instala con apt (pide tu contraseña) y queda en **Mostrar aplicaciones**. Para desinstalar:
+Te pedirá tu contraseña. Cuando termine, busca **TotalMD** en *Mostrar aplicaciones*.
+
+Funciona en Ubuntu 26.04 y en sistemas parecidos (Debian, Linux Mint, Pop!_OS) con procesador de 64 bits (x86_64).
+
+<details>
+<summary>Instalar sin la terminal</summary>
+
+1. Descarga [`TotalMD_amd64.deb`](https://github.com/abraham-development/totalmd/releases/latest/download/TotalMD_amd64.deb).
+2. Haz doble clic en el archivo descargado, o en una terminal ejecuta `sudo apt install ./TotalMD_amd64.deb` desde la carpeta de descargas.
+</details>
+
+## Qué puedes hacer
+
+- **Ver documentos Markdown** con tablas, listas de tareas, código con colores, fórmulas matemáticas, imágenes, notas al pie y emojis.
+- **Ver diagramas Mermaid:** de flujo, de secuencia, de clases, de estados, Gantt, circulares, mapas mentales, líneas de tiempo… Tanto los que van dentro de un `.md` como los archivos `.mmd`.
+- **Editar** con resaltado de sintaxis y ver el resultado al instante.
+- **Copiar un bloque de código con un clic** con el botón «Copiar» de cada bloque.
+- **Ampliar un diagrama** con doble clic, y exportarlo a SVG o PNG.
+- **Trabajar con varios documentos** en pestañas, y abrir una carpeta entera en la barra lateral.
+- **Exportar** el documento a HTML o a PDF.
+- **Tema claro u oscuro**, según el de Ubuntu o elegido a mano.
+
+![Modo dividido: editor a la izquierda y vista previa a la derecha](docs/captura-dividido.png)
+
+## Cómo se usa
+
+### Abrir documentos
+- Haz doble clic en un archivo `.md` o `.mmd`, o clic derecho → *Abrir con* → **TotalMD**.
+- O arrástralo a la ventana de TotalMD.
+- O usa los botones de arriba a la izquierda: **abrir archivo** (`Ctrl+O`) o **abrir carpeta** (`Ctrl+Mayús+O`). Al abrir una carpeta verás todos sus documentos en la barra lateral.
+
+### Los tres modos
+Arriba en el centro eliges cómo ver el documento:
+
+| Modo | Para qué sirve | Atajo |
+|---|---|---|
+| **Vista** | Leer el documento ya formateado | `Ctrl+1` |
+| **Editar** | Escribir el texto Markdown | `Ctrl+2` |
+| **Dividido** | Editar y ver el resultado a la vez; los dos lados se desplazan juntos | `Ctrl+3` |
+
+Guarda con `Ctrl+S`. Si cambias el archivo desde otro programa, TotalMD lo recarga solo.
+
+### Escribir un diagrama
+Dentro de un `.md`, escribe el diagrama en un bloque de código con la palabra `mermaid`:
+
+````markdown
+```mermaid
+flowchart LR
+    A[Idea] --> B[Documento] --> C[Diagrama]
+```
+````
+
+Si el diagrama tiene un error, TotalMD lo muestra en un recuadro rojo con el motivo, y abajo, en la barra de estado, avisa «⚠ 1 con error».
+
+### Atajos de teclado
+
+| Acción | Atajo |
+|---|---|
+| Nuevo / abrir / abrir carpeta | `Ctrl+N` / `Ctrl+O` / `Ctrl+Mayús+O` |
+| Guardar / guardar como | `Ctrl+S` / `Ctrl+Mayús+S` |
+| Cerrar pestaña / cambiar de pestaña | `Ctrl+W` / `Ctrl+Tab` |
+| Vista / Editar / Dividido | `Ctrl+1` / `Ctrl+2` / `Ctrl+3` |
+| Mostrar u ocultar la barra lateral | `Ctrl+B` |
+| Buscar | `Ctrl+F` |
+| Imprimir o guardar como PDF | `Ctrl+P` |
+| Agrandar / reducir / tamaño normal | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` |
+
+## Actualizaciones
+
+TotalMD se actualiza sola. Al abrirla, si hay una versión nueva, aparece una barra arriba con el botón **Actualizar**: pulsa, escribe tu contraseña y la app se reinicia ya actualizada.
+
+La versión que tienes aparece abajo a la derecha («TotalMD v…»). Haz clic ahí para buscar actualizaciones en ese momento.
+
+## Usar TotalMD para todos tus `.md`
+
+Para que los `.md` y `.mmd` se abran siempre con TotalMD, abre el menú de exportar (el icono ⇪ arriba a la derecha) y elige **«Usar como app predeterminada para .md/.mmd»**.
+
+## Desinstalar
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/abraham-development/totalmd/main/install.sh | bash -s -- --uninstall
 ```
 
-También puedes hacerlo a mano:
+---
 
-```bash
-wget https://github.com/abraham-development/totalmd/releases/latest/download/TotalMD_amd64.deb
-sudo apt install ./TotalMD_amd64.deb
-```
-
-Para que sea la app por defecto de `.md`/`.mmd`, usa el menú Exportar → «Usar como app predeterminada», o *clic derecho → Abrir con → TotalMD → Establecer como predeterminada* en Nautilus.
-
-### Actualizaciones
-
-TotalMD revisa GitHub al abrirse. Si hay una versión nueva, muestra una barra con **Actualizar**: la descarga, verifica su firma, la instala (pide tu contraseña) y se reinicia. También puedes comprobarlo a mano en el menú Exportar → «Buscar actualizaciones».
-
-### Compilar e instalar desde el código
-
-```bash
-pnpm tauri build
-sudo apt install ./src-tauri/target/release/bundle/deb/TotalMD_*_amd64.deb
-```
-
-**Solo para tu usuario, sin sudo:** `scripts/install-local.sh` (para desinstalar: `--uninstall`).
-
-## Publicar una versión nueva
-
-Tras hacer commit de los cambios:
-
-```bash
-scripts/publicar.sh 0.2.1 "Qué cambió en esta versión"
-```
-
-El script sube el número de versión, compila y **firma** el `.deb`, hace commit y etiqueta `v0.2.1`, sube el código a GitHub y crea la release con el `.deb` y `latest.json`. Las apps instaladas verán el aviso de actualización al abrirse.
-
-Para hacerlo necesitas `gh` con sesión iniciada y la clave de firma en `~/.tauri/totalmd.key` (o en la ruta de `TOTALMD_SIGNING_KEY`). **Guarda una copia de esa clave en un lugar seguro:** las instalaciones solo aceptan actualizaciones firmadas con ella. Si la pierdes, habrá que reinstalar a mano con una clave nueva.
-
-## Notas técnicas
-
-TotalMD arranca con `WEBKIT_DISABLE_DMABUF_RENDERER=1`. Con WebKitGTK 2.52 y Mesa, el renderizador DMA-BUF hacía que el proceso web fallara a veces al cerrar la app (Ubuntu mostraba «WebKitWebProcess has stopped unexpectedly»). Si defines la variable tú mismo, se respeta tu valor.
-
-## Licencia
-
-[MIT](LICENSE) © 2026 Abraham
+TotalMD es software libre bajo la [licencia MIT](LICENSE). Si quieres compilarla tú mismo, consulta [DESARROLLO.md](DESARROLLO.md).
