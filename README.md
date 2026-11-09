@@ -5,6 +5,7 @@ Visor y editor de escritorio para **Markdown** (`.md`) con soporte completo de *
 ## Funciones
 
 - **3 modos:** Vista (`Ctrl+1`), Edición (`Ctrl+2`) y Dividido con vista previa en vivo y scroll sincronizado (`Ctrl+3`).
+- **Copiar bloques de código** con un clic: cada bloque muestra su lenguaje y un botón «Copiar».
 - **Mermaid:** flowchart, secuencia, clases, estados, ER, Gantt, pie, mindmap, timeline, gitGraph y el resto de tipos. Los diagramas con errores muestran el mensaje en línea sin romper la app. Botones para ampliar (zoom/pan), copiar el código y exportar SVG/PNG. Doble clic sobre un diagrama lo amplía.
 - **Markdown completo:** GFM (tablas, tareas clicables, tachado, autoenlaces), notas al pie, emojis, front matter, fórmulas KaTeX, resaltado de código, imágenes relativas.
 - **Pestañas, barra lateral con el árbol de la carpeta y archivos recientes.** La sesión se restaura al abrir la app.
@@ -50,14 +51,26 @@ src-tauri/target/release/totalmd --selftest samples/ejemplo-completo.md samples/
 
 ## Instalación
 
-En cualquier Ubuntu 26.04 (o derivada con WebKitGTK 4.1), descarga e instala la última versión:
+En Ubuntu 26.04 (o Debian, Linux Mint, Pop!_OS… en x86_64) basta un comando:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/abraham-development/totalmd/main/install.sh | bash
+```
+
+Descarga la última versión desde [Releases](https://github.com/abraham-development/totalmd/releases), la instala con apt (pide tu contraseña) y queda en **Mostrar aplicaciones**. Para desinstalar:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/abraham-development/totalmd/main/install.sh | bash -s -- --uninstall
+```
+
+También puedes hacerlo a mano:
 
 ```bash
 wget https://github.com/abraham-development/totalmd/releases/latest/download/TotalMD_amd64.deb
 sudo apt install ./TotalMD_amd64.deb
 ```
 
-Después aparece en **Mostrar aplicaciones**. Para que sea la app por defecto de `.md`/`.mmd`, usa el menú Exportar → «Usar como app predeterminada», o *clic derecho → Abrir con → TotalMD → Establecer como predeterminada* en Nautilus.
+Para que sea la app por defecto de `.md`/`.mmd`, usa el menú Exportar → «Usar como app predeterminada», o *clic derecho → Abrir con → TotalMD → Establecer como predeterminada* en Nautilus.
 
 ### Actualizaciones
 

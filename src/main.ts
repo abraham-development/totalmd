@@ -519,6 +519,23 @@ async function copyText(text: string): Promise<void> {
   }
 }
 
+/** Texto de un bloque de código tal como está en el documento (sin el salto de línea final). */
+function codeBlockText(wrap: Element): string {
+  return (wrap.querySelector("pre")?.textContent ?? "").replace(/\n$/, "");
+}
+
+async function copyCodeBlock(button: HTMLElement): Promise<void> {
+  const wrap = button.closest(".code-wrap");
+  if (!wrap) return;
+  await copyText(codeBlockText(wrap));
+  button.textContent = "✓ Copiado";
+  button.classList.add("copied");
+  setTimeout(() => {
+    button.textContent = "Copiar";
+    button.classList.remove("copied");
+  }, 1500);
+}
+
 async function onDiagramAction(action: string, block: HTMLElement): Promise<void> {
   const tab = activeTab();
   if (!tab) return;
@@ -647,6 +664,7 @@ async function runAction(action: string, el?: HTMLElement): Promise<void> {
     case "reload-disk":
       if (tab?.path) reloadFromDisk(tab, await api.readFile(tab.path));
       return;
+    case "code-copy": if (el) await copyCodeBlock(el); return;
     case "check-update": return checkForUpdate(false);
     case "install-update": return installUpdate();
     case "dismiss-update": return dismissUpdate();
@@ -858,6 +876,10 @@ async function runSelftest(): Promise<void> {
     );
     preview.querySelectorAll<HTMLElement>(".mermaid-error").forEach((b) => api.log("info", `SELFTEST   error: ${b.querySelector("pre")?.textContent?.split("\n")[0]} | src(${(b.dataset.src ?? "").length})=${JSON.stringify((b.dataset.src ?? "").slice(0, 40))}`));
     if (stats.ok === 0 && stats.errors > 0) failures++;
+    const blocks = preview.querySelectorAll(".code-wrap");
+    if (blocks.length) {
+      api.log("info", `SELFTEST   bloques de código=${blocks.length} · primero (${blocks[0].querySelector(".code-lang")?.textContent || "sin lenguaje"}): ${JSON.stringify(codeBlockText(blocks[0]))}`);
+    }
     preview.querySelectorAll<SVGSVGElement>(".mermaid-svg svg").forEach((svg, n) => {
       if (n < 3) api.log("info", `SELFTEST   svg${n}: width=${svg.getAttribute("width")} style=${svg.getAttribute("style")} viewBox=${svg.getAttribute("viewBox")} rect=${Math.round(svg.getBoundingClientRect().width)}x${Math.round(svg.getBoundingClientRect().height)}`);
     });
@@ -866,6 +888,8 @@ async function runSelftest(): Promise<void> {
     setMode("view");
     await shot(`${i}-vista`);
     if (i === 0) {
+      preview.querySelector(".code-wrap")?.scrollIntoView({ block: "start" });
+      await shot(`${i}-codigo`);
       for (const [n, idx] of [[1, 0], [2, 6], [3, 10]] as const) {
         preview.querySelectorAll<HTMLElement>(".mermaid-block")[idx]?.scrollIntoView({ block: "start" });
         await shot(`${i}-diagramas-${n}`);
@@ -876,6 +900,8 @@ async function runSelftest(): Promise<void> {
       await renderPreview();
       preview.querySelectorAll<HTMLElement>(".mermaid-block")[0]?.scrollIntoView({ block: "start" });
       await shot(`${i}-oscuro-vista`);
+      preview.querySelector(".code-wrap")?.scrollIntoView({ block: "start" });
+      await shot(`${i}-oscuro-codigo`);
       setMode("split");
       await shot(`${i}-oscuro-dividido`);
       settings.theme = original;

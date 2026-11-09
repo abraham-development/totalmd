@@ -120,6 +120,26 @@ export function renderDocument(source: string, docPath: string | null, isMermaid
       img.src = fileUrl(resolve(baseDir, safeDecode(src.split(/[?#]/)[0])));
     }
   }
+  // Cabecera con el lenguaje y botón «Copiar», fuera del <pre> para que no se desplace con el scroll horizontal.
+  for (const pre of fragment.querySelectorAll("pre")) {
+    if (pre.closest(".front-matter")) continue;
+    const wrap = document.createElement("div");
+    wrap.className = "code-wrap";
+    const head = document.createElement("div");
+    head.className = "code-head";
+    const lang = document.createElement("span");
+    lang.className = "code-lang";
+    lang.textContent = /\blanguage-(\S+)/.exec(pre.querySelector("code")?.className ?? "")?.[1] ?? "";
+    const copy = document.createElement("button");
+    copy.className = "code-copy";
+    copy.dataset.action = "code-copy";
+    copy.title = "Copiar el bloque de código";
+    copy.textContent = "Copiar";
+    head.append(lang, copy);
+    pre.replaceWith(wrap);
+    wrap.append(head, pre);
+  }
+
   for (const table of fragment.querySelectorAll("table")) {
     const wrap = document.createElement("div");
     wrap.className = "table-wrap";

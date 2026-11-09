@@ -65,7 +65,9 @@ git tag -a "v$VERSION" -m "TotalMD $VERSION"
 git push -q --follow-tags origin main
 
 echo "==> Release en $REPO"
-gh release create "v$VERSION" --repo "$REPO" --title "TotalMD $VERSION" --notes "$NOTES" \
+INSTALL="curl -fsSL https://raw.githubusercontent.com/$REPO/main/install.sh | bash"
+RELEASE_NOTES="$NOTES"$'\n\n'"**Instalar o actualizar:**"$'\n\n```bash\n'"$INSTALL"$'\n```'
+gh release create "v$VERSION" --repo "$REPO" --title "TotalMD $VERSION" --notes "$RELEASE_NOTES" \
   "$OUT/TotalMD_${VERSION}_amd64.deb" "$OUT/TotalMD_amd64.deb" "$OUT/latest.json"
 
 echo

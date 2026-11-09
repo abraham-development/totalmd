@@ -93,6 +93,30 @@
   background: var(--md-pre-bg);
   border-radius: 8px;
 }
+/* Bloques de código con cabecera (lenguaje + botón Copiar). */
+.markdown-body .code-wrap { margin: 0 0 16px; background: var(--md-pre-bg); border-radius: 8px; overflow: hidden; }
+.markdown-body .code-wrap > pre { margin: 0; border-radius: 0; padding-top: 6px; }
+.markdown-body .code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px 0 16px;
+  font: 600 11px/1.6 var(--font-ui, sans-serif);
+  color: var(--md-muted);
+  text-transform: lowercase;
+}
+.markdown-body .code-copy {
+  padding: 2px 10px;
+  font: 600 11px var(--font-ui, sans-serif);
+  color: var(--md-muted);
+  background: transparent;
+  border: 1px solid var(--md-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.markdown-body .code-copy:hover { color: var(--md-link); border-color: var(--md-link); }
+.markdown-body .code-copy.copied { color: #1a7f37; border-color: #1a7f37; }
 .markdown-body pre code { padding: 0; font-size: 100%; background: transparent; border-radius: 0; white-space: pre; }
 .markdown-body pre code.hljs { display: inline; padding: 0; background: transparent; }
 

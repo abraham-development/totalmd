@@ -56,7 +56,20 @@ const doc: Documento = { ruta: "ejemplo.md", diagramas: 10 };
 ```
 
 ```bash
-sudo apt install ./TotalMD_0.1.0_amd64.deb
+curl -fsSL https://raw.githubusercontent.com/abraham-development/totalmd/main/install.sh | bash
+```
+
+Bloque sin lenguaje:
+
+```
+Texto plano dentro de un bloque de código.
+Cada bloque tiene un botón «Copiar» arriba a la derecha.
+```
+
+Bloque con una línea muy larga (el botón no se mueve al desplazar el código):
+
+```json
+{ "nombre": "TotalMD", "descripcion": "Visor y editor de Markdown con diagramas Mermaid", "plataforma": "Ubuntu 26.04", "motor": "WebKitGTK", "licencia": "MIT" }
 ```
 
 ## Fórmulas

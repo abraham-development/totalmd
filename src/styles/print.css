@@ -6,7 +6,7 @@
   body { display: block; }
 
   #toolbar, #tabbar, #conflict-bar, #findbar, #sidebar-col, .resizer,
-  #editor-pane, #statusbar, #welcome, #toast, .mermaid-tools { display: none !important; }
+  #editor-pane, #statusbar, #welcome, #toast, .mermaid-tools, .code-copy { display: none !important; }
 
   #content-col, #workspace, #preview-pane { display: block !important; overflow: visible !important; height: auto !important; }
 

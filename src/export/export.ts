@@ -34,7 +34,7 @@ function escapeHtml(s: string): string {
 /** Copia del contenido renderizado sin controles de la interfaz y con rutas de imagen originales. */
 function cleanClone(preview: HTMLElement): HTMLElement {
   const clone = preview.cloneNode(true) as HTMLElement;
-  clone.querySelectorAll(".mermaid-tools").forEach((el) => el.remove());
+  clone.querySelectorAll(".mermaid-tools, .code-copy").forEach((el) => el.remove());
   clone.querySelectorAll<HTMLImageElement>("img[data-orig-src]").forEach((img) => {
     img.setAttribute("src", img.dataset.origSrc!);
     img.removeAttribute("data-orig-src");
