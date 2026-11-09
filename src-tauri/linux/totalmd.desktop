@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name={{name}}
+GenericName=Markdown Editor
+GenericName[es]=Editor de Markdown
+Comment={{comment}}
+Comment[es]=Visor y editor de Markdown con diagramas Mermaid
+Exec={{exec}} %F
+TryExec={{exec}}
+Icon={{icon}}
+Terminal=false
+StartupNotify=true
+StartupWMClass={{exec}}
+Categories=Utility;TextEditor;
+Keywords=markdown;md;mermaid;mmd;diagram;editor;viewer;diagrama;
+{{#if mime_type}}MimeType={{mime_type}};text/x-markdown;{{/if}}

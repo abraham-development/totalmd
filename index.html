@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TotalMD</title>
+  </head>
+  <body>
+    <header id="toolbar">
+      <div class="group">
+        <button data-action="toggle-sidebar" title="Barra lateral (Ctrl+B)" aria-label="Barra lateral">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+        </button>
+        <button data-action="new" title="Nuevo (Ctrl+N)" aria-label="Nuevo">
+          <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></svg>
+        </button>
+        <button data-action="open" title="Abrir archivo (Ctrl+O)" aria-label="Abrir archivo">
+          <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+        </button>
+        <button data-action="open-folder" title="Abrir carpeta (Ctrl+Mayús+O)" aria-label="Abrir carpeta">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </button>
+        <button data-action="save" title="Guardar (Ctrl+S)" aria-label="Guardar">
+          <svg viewBox="0 0 24 24"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8V3M7 21v-7h10v7"/></svg>
+        </button>
+      </div>
+
+      <div class="group segmented" role="tablist" aria-label="Modo">
+        <button data-mode="view" title="Vista (Ctrl+1)">
+          <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Vista</span>
+        </button>
+        <button data-mode="edit" title="Edición (Ctrl+2)">
+          <svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg><span>Editar</span>
+        </button>
+        <button data-mode="split" title="Dividido (Ctrl+3)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/></svg><span>Dividido</span>
+        </button>
+      </div>
+
+      <div class="group">
+        <div class="menu-wrap">
+          <button data-action="export-menu" title="Exportar" aria-haspopup="menu" aria-label="Exportar">
+            <svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+          </button>
+          <div class="menu" id="export-menu" role="menu" hidden>
+            <button data-action="export-html" role="menuitem">Exportar a HTML…</button>
+            <button data-action="export-pdf" role="menuitem">Imprimir / PDF… <kbd>Ctrl+P</kbd></button>
+            <hr />
+            <button data-action="reveal" role="menuitem">Mostrar en carpeta</button>
+            <button data-action="set-default" role="menuitem">Usar como app predeterminada para .md/.mmd</button>
+          </div>
+        </div>
+        <button data-action="find" title="Buscar (Ctrl+F)" aria-label="Buscar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+        </button>
+        <button data-action="cycle-theme" title="Tema: sistema / claro / oscuro" aria-label="Tema" id="theme-btn">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <nav id="tabbar" role="tablist" aria-label="Documentos"></nav>
+
+    <div id="conflict-bar" hidden>
+      <span id="conflict-text"></span>
+      <button data-action="reload-disk">Recargar desde disco</button>
+      <button data-action="keep-mine">Mantener mi versión</button>
+    </div>
+
+    <div id="findbar" hidden>
+      <input id="find-input" type="search" placeholder="Buscar en la vista…" />
+      <button data-action="find-prev" title="Anterior (Mayús+Enter)">↑</button>
+      <button data-action="find-next" title="Siguiente (Enter)">↓</button>
+      <button data-action="find-close" title="Cerrar (Esc)">✕</button>
+    </div>
+
+    <main id="main">
+      <aside id="sidebar"></aside>
+      <div id="sidebar-resizer" class="resizer"></div>
+      <section id="workspace" data-mode="view">
+        <div id="editor-pane"></div>
+        <div id="split-resizer" class="resizer"></div>
+        <div id="preview-pane">
+          <article id="preview" class="markdown-body"></article>
+        </div>
+        <div id="welcome" hidden>
+          <img src="/src/assets/icon.svg" alt="" width="96" height="96" />
+          <h1>TotalMD</h1>
+          <p>Visor y editor de Markdown con diagramas Mermaid.</p>
+          <div class="welcome-actions">
+            <button data-action="open" class="primary">Abrir archivo…</button>
+            <button data-action="open-folder">Abrir carpeta…</button>
+            <button data-action="new">Nuevo documento</button>
+          </div>
+          <p class="hint">También puedes arrastrar archivos .md o .mmd a esta ventana.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer id="statusbar">
+      <span id="st-path"></span>
+      <span class="spacer"></span>
+      <span id="st-diagrams"></span>
+      <span id="st-cursor"></span>
+      <span id="st-words"></span>
+      <span id="st-type"></span>
+      <span>UTF-8</span>
+      <span id="st-zoom" title="Ctrl+= / Ctrl+- / Ctrl+0"></span>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

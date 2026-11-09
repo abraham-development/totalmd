@@ -1,0 +1,16 @@
+flowchart LR
+    subgraph Entrada
+        A[Archivo .md] 
+        B[Archivo .mmd]
+    end
+    subgraph TotalMD
+        C{Tipo}
+        D[markdown-it]
+        E[Mermaid]
+        F[Vista previa]
+    end
+    A --> C
+    B --> C
+    C -- Markdown --> D --> F
+    C -- Diagrama --> E --> F
+    D -. bloques mermaid .-> E

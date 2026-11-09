@@ -1,0 +1,96 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "TotalMD",
+  "mainBinaryName": "totalmd",
+  "version": "0.1.0",
+  "identifier": "dev.totalmd.TotalMD",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "TotalMD",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 640,
+        "minHeight": 420,
+        "dragDropEnabled": true
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self' ipc: http://ipc.localhost",
+        "script-src": "'self'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' asset: http://asset.localhost data: blob: https:",
+        "font-src": "'self' data:",
+        "connect-src": "ipc: http://ipc.localhost asset: http://asset.localhost"
+      },
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$HOME/**",
+          "/media/**",
+          "/mnt/**",
+          "/tmp/**",
+          "/usr/share/doc/**"
+        ]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "deb"
+    ],
+    "category": "Utility",
+    "shortDescription": "Visor y editor de Markdown + Mermaid",
+    "longDescription": "TotalMD muestra y edita archivos Markdown (.md) con diagramas Mermaid embebidos y archivos .mmd, con vista previa en vivo, pestañas, árbol de carpeta y exportación a HTML, PDF, SVG y PNG.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/64x64.png",
+      "icons/128x128.png",
+      "icons/icon.png"
+    ],
+    "fileAssociations": [
+      {
+        "ext": [
+          "md",
+          "markdown",
+          "mdown",
+          "mkd"
+        ],
+        "mimeType": "text/markdown",
+        "name": "Markdown",
+        "description": "Documento Markdown",
+        "role": "Editor"
+      },
+      {
+        "ext": [
+          "mmd",
+          "mermaid"
+        ],
+        "mimeType": "text/x-mermaid",
+        "name": "Mermaid",
+        "description": "Diagrama Mermaid",
+        "role": "Editor"
+      }
+    ],
+    "linux": {
+      "deb": {
+        "desktopTemplate": "linux/totalmd.desktop",
+        "files": {
+          "/usr/share/mime/packages/totalmd.xml": "linux/totalmd-mime.xml",
+          "/usr/share/icons/hicolor/scalable/apps/totalmd.svg": "icons/icon.svg"
+        },
+        "postInstallScript": "linux/postinst.sh",
+        "postRemoveScript": "linux/postrm.sh"
+      }
+    }
+  }
+}

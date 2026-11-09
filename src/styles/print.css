@@ -1,0 +1,25 @@
+/* Impresión / PDF: solo el documento renderizado, siempre en claro. */
+@media print {
+  @page { margin: 16mm 14mm; }
+
+  html, body { height: auto; overflow: visible; background: #fff !important; }
+  body { display: block; }
+
+  #toolbar, #tabbar, #conflict-bar, #findbar, #sidebar, .resizer,
+  #editor-pane, #statusbar, #welcome, #toast, .mermaid-tools { display: none !important; }
+
+  #main, #workspace, #preview-pane { display: block !important; overflow: visible !important; height: auto !important; }
+
+  :root, :root[data-theme="dark"] {
+    --md-bg: #fff; --md-fg: #1f2328; --md-muted: #59636e; --md-border: #d1d9e0; --md-border-soft: #d1d9e0;
+    --md-code-bg: #818b981f; --md-pre-bg: #f6f8fa; --md-link: #0969da; --md-quote: #59636e; --md-diagram-bg: #fff;
+  }
+
+  .markdown-body { max-width: none; padding: 0; font-size: 11pt; }
+  .markdown-body pre, .markdown-body blockquote, .markdown-body table,
+  .markdown-body .mermaid-block, .markdown-body img { break-inside: avoid; }
+  .markdown-body h1, .markdown-body h2, .markdown-body h3 { break-after: avoid; }
+  .markdown-body pre code { white-space: pre-wrap; }
+  .markdown-body .mermaid-block { border: 0; padding: 0; }
+  .markdown-body a { color: inherit; text-decoration: underline; }
+}
