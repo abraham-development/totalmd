@@ -3,6 +3,8 @@ name = "totalmd"
 version = "0.1.0"
 description = "Visor y editor de Markdown con soporte completo para diagramas Mermaid"
 authors = ["Abraham"]
+license = "MIT"
+repository = "https://github.com/abraham-development/totalmd"
 edition = "2021"
 
 [lib]
@@ -23,6 +25,8 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 notify = "8"
 base64 = "0.22"
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
 
 [profile.release]
 codegen-units = 1

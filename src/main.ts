@@ -22,6 +22,7 @@ import { initScrollSync, rebuildAnchors, syncFromEditor, syncFromPreview, previe
 import { initSidebar, loadFolder, refreshTree, setActiveInTree, getRoot } from "./sidebar/tree";
 import { exportHtml, exportPdf, exportSvg, exportPng } from "./export/export";
 import { askUnsaved, toast, openDiagramViewer } from "./ui/dialogs";
+import { initUpdater, checkForUpdate, installUpdate, dismissUpdate } from "./updater";
 import { settings, loadSettings, saveSetting, addRecent, type Mode } from "./state/settings";
 import { tabs, createTab, activeTab, setActiveId, findByPath, removeTab, renderTabBar, tabTitle, type Tab } from "./state/tabs";
 
@@ -646,6 +647,9 @@ async function runAction(action: string, el?: HTMLElement): Promise<void> {
     case "reload-disk":
       if (tab?.path) reloadFromDisk(tab, await api.readFile(tab.path));
       return;
+    case "check-update": return checkForUpdate(false);
+    case "install-update": return installUpdate();
+    case "dismiss-update": return dismissUpdate();
     case "keep-mine":
       if (tab) {
         tab.conflict = false;
@@ -812,17 +816,23 @@ async function bindWindow(): Promise<void> {
   await appWindow.onCloseRequested(async (event) => {
     syncActiveState();
     saveSession();
-    const dirty = tabs.filter((t) => t.dirty);
-    if (!dirty.length) return;
+    if (!tabs.some((t) => t.dirty)) return;
     event.preventDefault();
-    for (const tab of dirty) {
-      activateTab(tab);
-      const choice = await askUnsaved(tabTitle(tab));
-      if (choice === "cancel") return;
-      if (choice === "save" && !(await saveTab(tab))) return;
-    }
-    await appWindow.destroy();
+    if (await confirmUnsavedAll()) await appWindow.destroy();
   });
+}
+
+/** Pregunta por cada pestaña con cambios. Devuelve false si el usuario cancela. */
+async function confirmUnsavedAll(): Promise<boolean> {
+  syncActiveState();
+  for (const tab of tabs.filter((t) => t.dirty)) {
+    activateTab(tab);
+    const choice = await askUnsaved(tabTitle(tab));
+    if (choice === "cancel") return false;
+    if (choice === "save" && !(await saveTab(tab))) return false;
+  }
+  saveSession();
+  return true;
 }
 
 // ───────────────────────────── Autoprueba ─────────────────────────────
@@ -938,6 +948,10 @@ async function main(): Promise<void> {
   refreshChrome();
 
   if (selftest) await runSelftest();
+  else {
+    await initUpdater(confirmUnsavedAll);
+    setTimeout(() => void checkForUpdate(true), 4000);
+  }
 }
 
 void main().catch(reportError);

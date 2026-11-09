@@ -50,15 +50,44 @@ src-tauri/target/release/totalmd --selftest samples/ejemplo-completo.md samples/
 
 ## Instalación
 
-**Paquete .deb (recomendado):**
+En cualquier Ubuntu 26.04 (o derivada con WebKitGTK 4.1), descarga e instala la última versión:
+
+```bash
+wget https://github.com/abraham-development/totalmd/releases/latest/download/TotalMD_amd64.deb
+sudo apt install ./TotalMD_amd64.deb
+```
+
+Después aparece en **Mostrar aplicaciones**. Para que sea la app por defecto de `.md`/`.mmd`, usa el menú Exportar → «Usar como app predeterminada», o *clic derecho → Abrir con → TotalMD → Establecer como predeterminada* en Nautilus.
+
+### Actualizaciones
+
+TotalMD revisa GitHub al abrirse. Si hay una versión nueva, muestra una barra con **Actualizar**: la descarga, verifica su firma, la instala (pide tu contraseña) y se reinicia. También puedes comprobarlo a mano en el menú Exportar → «Buscar actualizaciones».
+
+### Compilar e instalar desde el código
 
 ```bash
 pnpm tauri build
-sudo apt install ./src-tauri/target/release/bundle/deb/TotalMD_0.1.0_amd64.deb
+sudo apt install ./src-tauri/target/release/bundle/deb/TotalMD_*_amd64.deb
 ```
 
 **Solo para tu usuario, sin sudo:** `scripts/install-local.sh` (para desinstalar: `--uninstall`).
 
-Después aparece en **Mostrar aplicaciones**. Para que sea la app por defecto de `.md`/`.mmd`, usa el menú Exportar → «Usar como app predeterminada», o *clic derecho → Abrir con → TotalMD → Establecer como predeterminada* en Nautilus.
+## Publicar una versión nueva
 
-Nota técnica: TotalMD arranca con `WEBKIT_DISABLE_DMABUF_RENDERER=1`. Con WebKitGTK 2.52 y Mesa, el renderizador DMA-BUF hacía que el proceso web fallara a veces al cerrar la app (Ubuntu mostraba «WebKitWebProcess has stopped unexpectedly»). Si defines la variable tú mismo, se respeta tu valor.
+Tras hacer commit de los cambios:
+
+```bash
+scripts/publicar.sh 0.2.1 "Qué cambió en esta versión"
+```
+
+El script sube el número de versión, compila y **firma** el `.deb`, hace commit y etiqueta `v0.2.1`, sube el código a GitHub y crea la release con el `.deb` y `latest.json`. Las apps instaladas verán el aviso de actualización al abrirse.
+
+Para hacerlo necesitas `gh` con sesión iniciada y la clave de firma en `~/.tauri/totalmd.key` (o en la ruta de `TOTALMD_SIGNING_KEY`). **Guarda una copia de esa clave en un lugar seguro:** las instalaciones solo aceptan actualizaciones firmadas con ella. Si la pierdes, habrá que reinstalar a mano con una clave nueva.
+
+## Notas técnicas
+
+TotalMD arranca con `WEBKIT_DISABLE_DMABUF_RENDERER=1`. Con WebKitGTK 2.52 y Mesa, el renderizador DMA-BUF hacía que el proceso web fallara a veces al cerrar la app (Ubuntu mostraba «WebKitWebProcess has stopped unexpectedly»). Si defines la variable tú mismo, se respeta tu valor.
+
+## Licencia
+
+[MIT](LICENSE) © 2026 Abraham

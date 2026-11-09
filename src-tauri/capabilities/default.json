@@ -2,7 +2,9 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Permisos de la ventana principal",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     "core:window:allow-destroy",
@@ -15,9 +17,20 @@
     "opener:default",
     {
       "identifier": "opener:allow-open-path",
-      "allow": [{ "path": "$HOME/**" }, { "path": "/media/**" }, { "path": "/mnt/**" }]
+      "allow": [
+        {
+          "path": "$HOME/**"
+        },
+        {
+          "path": "/media/**"
+        },
+        {
+          "path": "/mnt/**"
+        }
+      ]
     },
     "opener:allow-reveal-item-in-dir",
-    "store:default"
+    "store:default",
+    "process:allow-restart"
   ]
 }

@@ -57,6 +57,8 @@
               <hr />
               <button data-action="reveal" role="menuitem">Mostrar en carpeta</button>
               <button data-action="set-default" role="menuitem">Usar como app predeterminada para .md/.mmd</button>
+              <hr />
+              <button data-action="check-update" role="menuitem">Buscar actualizaciones</button>
             </div>
           </div>
           <button data-action="find" title="Buscar (Ctrl+F)" aria-label="Buscar">
@@ -69,6 +71,12 @@
       </header>
 
       <nav id="tabbar" role="tablist" aria-label="Documentos"></nav>
+
+      <div id="update-bar" hidden>
+        <span><span id="update-text"></span> <small id="update-notes"></small></span>
+        <button data-action="install-update" class="primary">Actualizar</button>
+        <button data-action="dismiss-update">Más tarde</button>
+      </div>
 
       <div id="conflict-bar" hidden>
         <span id="conflict-text"></span>

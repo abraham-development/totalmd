@@ -166,7 +166,19 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 #conflict-bar { background: var(--warn-bg); color: var(--warn-fg); }
 #conflict-bar span { flex: 1; }
 #conflict-bar button { border: 1px solid currentColor; padding: 3px 10px; }
-#conflict-bar[hidden], #findbar[hidden] { display: none; }
+#conflict-bar[hidden], #findbar[hidden], #update-bar[hidden] { display: none; }
+#update-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent-soft);
+}
+#update-bar > span { flex: 1; }
+#update-bar small { color: var(--fg-muted); }
+#update-bar button:not(.primary) { border: 1px solid var(--border); padding: 3px 10px; }
+#update-bar button.primary { padding: 3px 12px; }
 #findbar { background: var(--bg-alt); justify-content: flex-end; }
 #find-input {
   width: 280px;

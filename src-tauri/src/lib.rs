@@ -1,4 +1,5 @@
 mod fs_cmds;
+mod updater;
 mod watcher;
 
 use std::path::{Path, PathBuf};
@@ -177,7 +178,10 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .manage(startup)
+        .manage(updater::PendingUpdate::default())
         .on_page_load(|webview, payload| {
             if std::env::var_os("TOTALMD_DEBUG").is_some() {
                 eprintln!("[page] {:?} {}", payload.event(), payload.url());
@@ -200,6 +204,8 @@ pub fn run() {
             exit_app,
             set_as_default_app,
             debug_snapshot,
+            updater::check_update,
+            updater::install_update,
             fs_cmds::read_file,
             fs_cmds::write_file,
             fs_cmds::write_binary,
