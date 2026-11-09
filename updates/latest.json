@@ -1,7 +1,7 @@
 {
   "version": "0.2.2",
   "notes": "Actualizaciones más fiables: reintentos automáticos y una segunda fuente para detectar versiones nuevas.",
-  "pub_date": "2026-11-09T05:33:58.719Z",
+  "pub_date": "2026-11-09T05:39:34.777Z",
   "platforms": {
     "linux-x86_64-deb": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSDNBczFpTU5vUjMzV1ZPeXRoaTkvTHgybzNrZ2lvR1oxcC9zaDFXRDloM2NxUWtHK1FTWEpNUFd3SUZEdmM2YllUS1piSC83T1dJTHlwa3hEdlYzenc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0MjAyNDM4CWZpbGU6VG90YWxNRF8wLjIuMl9hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMgo3MHEwbXNmbnlncGRybjRpWGx0bzhiVGFZT3dsTVJjbjNtelVNYnRURHFSY29idFpNSXhTQ1NEVzBWZTlRYWhsNjFYckdEQzVGdllhUVoxL2ZtYXpBUT09Cg==",
