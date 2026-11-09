@@ -57,9 +57,13 @@ node -e '
     version: v, notes, pub_date: new Date().toISOString(),
     platforms: { "linux-x86_64-deb": entry, "linux-x86_64": entry },
   }, null, 2) + "\n");' "$VERSION" "$NOTES" "$DEB.sig" "$URL" "$OUT/latest.json"
+# Copia en el repo: la app la lee primero desde raw.githubusercontent.com, que es más
+# fiable que la descarga de assets .json de las releases (a veces responde 504).
+mkdir -p updates
+cp "$OUT/latest.json" updates/latest.json
 
 echo "==> Commit, etiqueta y push a $REPO"
-git add package.json src-tauri/tauri.conf.json src-tauri/Cargo.toml src-tauri/Cargo.lock
+git add package.json src-tauri/tauri.conf.json src-tauri/Cargo.toml src-tauri/Cargo.lock updates/latest.json
 git commit -q -m "Versión $VERSION" -m "$NOTES"
 git tag -a "v$VERSION" -m "TotalMD $VERSION"
 git push -q --follow-tags origin main

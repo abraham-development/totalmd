@@ -69,7 +69,7 @@ export async function installUpdate(): Promise<void> {
     await relaunch();
   } catch (e) {
     installing = false;
-    text().textContent = `No se pudo instalar la actualización: ${e}`;
+    text().textContent = `No se pudo instalar la actualización (${e}). Pulsa «Actualizar» para reintentar.`;
     setButtons(true);
   }
 }
