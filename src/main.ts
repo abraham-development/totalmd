@@ -947,11 +947,9 @@ async function main(): Promise<void> {
   }
   refreshChrome();
 
+  await initUpdater(confirmUnsavedAll);
   if (selftest) await runSelftest();
-  else {
-    await initUpdater(confirmUnsavedAll);
-    setTimeout(() => void checkForUpdate(true), 4000);
-  }
+  else setTimeout(() => void checkForUpdate(true), 4000);
 }
 
 void main().catch(reportError);

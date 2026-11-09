@@ -22,8 +22,9 @@ const text = () => document.getElementById("update-text")!;
 export async function initUpdater(beforeInstall: () => Promise<boolean>): Promise<void> {
   confirmUnsaved = beforeInstall;
   if (!isTauri) return;
-  const item = document.querySelector<HTMLElement>('[data-action="check-update"]');
-  if (item) item.textContent = `Buscar actualizaciones (v${await getVersion()})`;
+  const version = await getVersion();
+  document.querySelector<HTMLElement>('.menu [data-action="check-update"]')!.textContent = `Buscar actualizaciones (v${version})`;
+  document.getElementById("st-version")!.textContent = `TotalMD v${version}`;
   await listen<{ downloaded: number; total: number | null }>("update-progress", ({ payload }) => {
     const mb = (n: number) => (n / 1_048_576).toFixed(1);
     text().textContent = payload.total

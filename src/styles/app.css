@@ -309,6 +309,8 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 #statusbar .spacer { flex: 1; }
 #st-path { overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; }
 #st-diagrams.warn { color: var(--danger); }
+#st-version { padding: 0 6px; margin: -3px 0; border-radius: 4px; font-size: 12px; color: var(--fg-muted); }
+#st-version:hover { color: var(--accent); background: var(--bg-hover); }
 
 /* ── Diálogos y avisos ── */
 .modal-overlay {
