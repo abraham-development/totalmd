@@ -1,15 +1,15 @@
 {
-  "version": "0.2.3",
-  "notes": "Quitar archivos de la barra lateral (Recientes) con clic derecho o con la ✕, sin borrarlos del disco. El clic derecho también permite mostrar el archivo en su carpeta y copiar su ruta.",
-  "pub_date": "2026-11-12T03:58:07.474Z",
+  "version": "0.2.4",
+  "notes": "Exportar a PDF directo: en A4, igual que en pantalla y compacto para gastar menos hojas al imprimir (Ctrl+P sigue imprimiendo). Corregidos los diagramas Gantt, que se veían diminutos.",
+  "pub_date": "2026-11-12T06:34:52.137Z",
   "platforms": {
     "linux-x86_64-deb": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSHhaWFhEajdaRjlXWCtkWUtMeld5RTNDYVdGU293Z0FxYjNVOFkzRXVDeXY5OWVXa3A2TXNBeG8zV0pjMWlSMUE1UlVoN2dvcEltVFdXdXN6UzRhS3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDU1ODgxCWZpbGU6VG90YWxNRF8wLjIuM19hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMwpLaE1GV2JmbGZBNm0vem9rV0d3b0tPdkU1UGxZTnZvL0hTVnFzUVJodGZ5aTd1TG13eEdZOFI1K2ExdzR5MWI5L2xReWdPbDd4S0Z6S3BDZDQ1bkdBQT09Cg==",
-      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.3/TotalMD_0.2.3_amd64.deb"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSDdXM1ZRdXJwTVFpUFFMOG0rNmw3NmhWQ2ZUMDNVWFJMU3hwb3dwc3doWnRUVGxHSnRqWk5BRkF0SWFJeDdjRnpKTUtiWVF6bWtuTk9TemN3MmkrNUFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDY1MTIzCWZpbGU6VG90YWxNRF8wLjIuNF9hbWQ2NC5kZWIJdmVyc2lvbjowLjIuNAppOTM4azVnQWVCWCtQcHhwTTFtbzA1Z1NVVEJZdWZEOGNNTlVqTVlYOTc4UkJ6NXQ3cEhkMzJkYWZmaDZzMUNYc3VUeGNqaVI3WElvWVYwM09wMGlEdz09Cg==",
+      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.4/TotalMD_0.2.4_amd64.deb"
     },
     "linux-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSHhaWFhEajdaRjlXWCtkWUtMeld5RTNDYVdGU293Z0FxYjNVOFkzRXVDeXY5OWVXa3A2TXNBeG8zV0pjMWlSMUE1UlVoN2dvcEltVFdXdXN6UzRhS3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDU1ODgxCWZpbGU6VG90YWxNRF8wLjIuM19hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMwpLaE1GV2JmbGZBNm0vem9rV0d3b0tPdkU1UGxZTnZvL0hTVnFzUVJodGZ5aTd1TG13eEdZOFI1K2ExdzR5MWI5L2xReWdPbDd4S0Z6S3BDZDQ1bkdBQT09Cg==",
-      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.3/TotalMD_0.2.3_amd64.deb"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSDdXM1ZRdXJwTVFpUFFMOG0rNmw3NmhWQ2ZUMDNVWFJMU3hwb3dwc3doWnRUVGxHSnRqWk5BRkF0SWFJeDdjRnpKTUtiWVF6bWtuTk9TemN3MmkrNUFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDY1MTIzCWZpbGU6VG90YWxNRF8wLjIuNF9hbWQ2NC5kZWIJdmVyc2lvbjowLjIuNAppOTM4azVnQWVCWCtQcHhwTTFtbzA1Z1NVVEJZdWZEOGNNTlVqTVlYOTc4UkJ6NXQ3cEhkMzJkYWZmaDZzMUNYc3VUeGNqaVI3WElvWVYwM09wMGlEdz09Cg==",
+      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.4/TotalMD_0.2.4_amd64.deb"
     }
   }
 }
