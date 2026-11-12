@@ -63,3 +63,12 @@ export function saveSetting<K extends keyof Settings>(key: K, value: Settings[K]
 export function addRecent(path: string): void {
   saveSetting("recent", [path, ...settings.recent.filter((p) => p !== path)].slice(0, 12));
 }
+
+/** Quita un archivo de Recientes (no lo borra del disco). */
+export function removeRecent(path: string): void {
+  saveSetting("recent", settings.recent.filter((p) => p !== path));
+}
+
+export function clearRecent(): void {
+  saveSetting("recent", []);
+}

@@ -19,11 +19,11 @@ import { initEditor, createState, getView, showState, setEditorDark, topVisibleL
 import { renderDocument, countWords } from "./preview/render";
 import { renderMermaidBlocks, setMermaidTheme, type MermaidStats } from "./preview/mermaid";
 import { initScrollSync, rebuildAnchors, syncFromEditor, syncFromPreview, previewTopLine, scrollPreviewToLine } from "./preview/scrollSync";
-import { initSidebar, loadFolder, refreshTree, setActiveInTree, getRoot } from "./sidebar/tree";
+import { initSidebar, loadFolder, refreshTree, setActiveInTree, getRoot, showContextMenu, hideContextMenu } from "./sidebar/tree";
 import { exportHtml, exportPdf, exportSvg, exportPng } from "./export/export";
 import { askUnsaved, toast, openDiagramViewer } from "./ui/dialogs";
 import { initUpdater, checkForUpdate, installUpdate, dismissUpdate } from "./updater";
-import { settings, loadSettings, saveSetting, addRecent, type Mode } from "./state/settings";
+import { settings, loadSettings, saveSetting, addRecent, removeRecent, clearRecent, type Mode } from "./state/settings";
 import { tabs, createTab, activeTab, setActiveId, findByPath, removeTab, renderTabBar, tabTitle, type Tab } from "./state/tabs";
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
@@ -660,6 +660,24 @@ async function runAction(action: string, el?: HTMLElement): Promise<void> {
       return;
     }
     case "refresh-tree": return refreshTree(settings.recent);
+    case "recent-remove":
+      if (el?.dataset.path) {
+        removeRecent(el.dataset.path);
+        await refreshTree(settings.recent);
+        toast("Quitado de la lista (el archivo sigue en el disco)");
+      }
+      return;
+    case "recent-clear":
+      clearRecent();
+      return refreshTree(settings.recent);
+    case "path-open": if (el?.dataset.path) await openFile(el.dataset.path); return;
+    case "path-reveal": if (el?.dataset.path) await revealItemInDir(el.dataset.path); return;
+    case "path-copy":
+      if (el?.dataset.path) {
+        await copyText(el.dataset.path);
+        toast("Ruta copiada");
+      }
+      return;
     case "close-folder": return openFolder(null);
     case "reload-disk":
       if (tab?.path) reloadFromDisk(tab, await api.readFile(tab.path));
@@ -686,6 +704,7 @@ function bindEvents(): void {
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     if (!target.closest(".menu-wrap")) $("#export-menu").hidden = true;
+    if (!target.closest("#ctx-menu") || target.closest("[data-action]")) hideContextMenu();
 
     const modeBtn = target.closest<HTMLElement>("#toolbar [data-mode]");
     if (modeBtn) return setMode(modeBtn.dataset.mode as Mode);
@@ -764,6 +783,8 @@ function bindEvents(): void {
   });
 
   window.addEventListener("keydown", onKeyDown, true);
+  window.addEventListener("blur", hideContextMenu);
+  window.addEventListener("resize", hideContextMenu);
   window.addEventListener("beforeprint", () => document.body.classList.add("printing"));
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"));
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => settings.theme === "system" && void applyTheme());
@@ -771,6 +792,11 @@ function bindEvents(): void {
 
 function onKeyDown(e: KeyboardEvent): void {
   if (document.querySelector(".modal-overlay")) return;
+  if (e.key === "Escape" && !$("#ctx-menu").hidden) {
+    hideContextMenu();
+    e.preventDefault();
+    return;
+  }
   const ctrl = e.ctrlKey || e.metaKey;
   const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   const tab = activeTab();
@@ -914,6 +940,16 @@ async function runSelftest(): Promise<void> {
       await shot(`${i}-sin-lateral`);
       settings.sidebar = sidebar;
       applyLayout();
+
+      // Menú contextual de Recientes (solo se muestra; no se quita nada).
+      const row = document.querySelector<HTMLElement>("#sidebar .tree-row.recent");
+      if (row) {
+        const r = row.getBoundingClientRect();
+        showContextMenu(row, r.left + 40, r.bottom);
+        api.log("info", `SELFTEST   menú de recientes: ${[...$("#ctx-menu").querySelectorAll("button")].map((b) => b.textContent).join(" | ")}`);
+        await shot(`${i}-menu-recientes`);
+        hideContextMenu();
+      } else api.log("info", "SELFTEST   sin recientes para probar el menú");
     }
   }
   await api.exitApp(failures ? 1 : 0);

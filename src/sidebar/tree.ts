@@ -12,7 +12,8 @@ export function initSidebar(el: HTMLElement, open: (path: string) => void): void
   container = el;
   onOpen = open;
   container.addEventListener("click", (e) => {
-    const item = (e.target as HTMLElement).closest<HTMLElement>("[data-path]");
+    if ((e.target as HTMLElement).closest(".row-remove")) return; // lo atiende runAction
+    const item = (e.target as HTMLElement).closest<HTMLElement>(".tree-row[data-path]");
     if (!item) return;
     if (item.dataset.dir) {
       const p = item.dataset.path!;
@@ -23,6 +24,51 @@ export function initSidebar(el: HTMLElement, open: (path: string) => void): void
       onOpen(item.dataset.path!);
     }
   });
+  container.addEventListener("contextmenu", (e) => {
+    const row = (e.target as HTMLElement).closest<HTMLElement>(".tree-row[data-path]");
+    if (!row) return;
+    e.preventDefault();
+    showContextMenu(row, e.clientX, e.clientY);
+  });
+  container.addEventListener("scroll", hideContextMenu, { passive: true });
+}
+
+/** Menú contextual de una fila: en Recientes permite quitarla de la lista (sin borrar el archivo). */
+export function showContextMenu(row: HTMLElement, x: number, y: number): void {
+  const menu = document.getElementById("ctx-menu")!;
+  const path = row.dataset.path!;
+  const items: ([string, string] | null)[] = row.dataset.recent
+    ? [
+        ["recent-remove", "Quitar de la barra lateral"],
+        ["path-reveal", "Mostrar en carpeta"],
+        ["path-copy", "Copiar ruta"],
+        null,
+        ["recent-clear", "Quitar todos los recientes"],
+      ]
+    : row.dataset.dir
+      ? [["path-reveal", "Mostrar en carpeta"], ["path-copy", "Copiar ruta"]]
+      : [["path-open", "Abrir"], ["path-reveal", "Mostrar en carpeta"], ["path-copy", "Copiar ruta"]];
+  menu.replaceChildren(
+    ...items.map((it) => {
+      if (!it) return document.createElement("hr");
+      const b = document.createElement("button");
+      b.setAttribute("role", "menuitem");
+      b.dataset.action = it[0];
+      b.dataset.path = path;
+      b.textContent = it[1];
+      if (it[0] === "recent-remove") b.title = "El archivo no se borra del disco";
+      return b;
+    }),
+  );
+  menu.hidden = false;
+  const { width, height } = menu.getBoundingClientRect();
+  menu.style.left = `${Math.max(4, Math.min(x, innerWidth - width - 4))}px`;
+  menu.style.top = `${Math.max(4, Math.min(y, innerHeight - height - 4))}px`;
+}
+
+export function hideContextMenu(): void {
+  const menu = document.getElementById("ctx-menu");
+  if (menu) menu.hidden = true;
 }
 
 export function getRoot(): string | null {
@@ -88,11 +134,20 @@ export async function refreshTree(recent: string[] = lastRecent): Promise<void> 
     container.append(h);
     container.append(renderNodes(recent.map((p) => ({ name: basename(p), path: p, is_dir: false, children: [] })), 0));
     container.querySelectorAll<HTMLElement>(".sidebar-section ~ ul .tree-row").forEach((row) => {
+      row.classList.add("recent");
+      row.dataset.recent = "1";
       row.title = row.dataset.path!;
       const hint = document.createElement("span");
       hint.className = "hint";
       hint.textContent = basename(dirname(row.dataset.path!));
-      row.append(hint);
+      const remove = document.createElement("button");
+      remove.className = "row-remove";
+      remove.dataset.action = "recent-remove";
+      remove.dataset.path = row.dataset.path!;
+      remove.title = "Quitar de la lista (no borra el archivo)";
+      remove.setAttribute("aria-label", "Quitar de la lista");
+      remove.textContent = "✕";
+      row.append(hint, remove);
     });
   }
 

@@ -243,6 +243,14 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 .tree-row .ico { width: 16px; text-align: center; font-size: 12px; }
 .tree-row .label { overflow: hidden; text-overflow: ellipsis; }
 .tree-row .hint { margin-left: auto; padding-left: 8px; color: var(--fg-muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+.tree-row .row-remove {
+  display: none; flex: none; margin-left: auto; padding: 0 5px; line-height: 18px;
+  font-size: 11px; color: var(--fg-muted); border-radius: 4px;
+}
+.tree-row .row-remove:hover { background: var(--bg-hover); color: var(--fg); }
+.tree-row.recent:hover .row-remove { display: block; }
+.tree-row.recent:hover .hint { display: none; }
+#ctx-menu { position: fixed; right: auto; top: auto; min-width: 220px; z-index: 100; }
 
 /* ── Espacio de trabajo y modos ── */
 #workspace { flex: 1; display: flex; min-width: 0; min-height: 0; position: relative; }
