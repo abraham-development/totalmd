@@ -33,7 +33,7 @@ Funciona en Ubuntu 26.04 y en sistemas parecidos (Debian, Linux Mint, Pop!_OS) c
 - **Copiar un bloque de código con un clic** con el botón «Copiar» de cada bloque.
 - **Ampliar un diagrama** con doble clic, y exportarlo a SVG o PNG.
 - **Trabajar con varios documentos** en pestañas, y abrir una carpeta entera en la barra lateral.
-- **Exportar** el documento a HTML o a PDF.
+- **Exportar a PDF** en A4, con el mismo aspecto que en pantalla y compacto, para no gastar hojas de más al imprimirlo. También a HTML.
 - **Tema claro u oscuro**, según el de Ubuntu o elegido a mano.
 
 ![Modo dividido: editor a la izquierda y vista previa a la derecha](docs/captura-dividido.png)
@@ -68,6 +68,11 @@ flowchart LR
 
 Si el diagrama tiene un error, TotalMD lo muestra en un recuadro rojo con el motivo, y abajo, en la barra de estado, avisa «⚠ 1 con error».
 
+### Exportar a PDF e imprimir
+En el menú de exportar (el icono ⇪ arriba a la derecha) elige **Exportar a PDF…** y dónde guardarlo. El PDF sale en tamaño A4 y siempre en colores claros, aunque uses el tema oscuro. La letra es compacta y los diagramas se ajustan a la página, sin que un título quede solo al final de una hoja.
+
+Para imprimir directamente, usa **Imprimir…** en el mismo menú o pulsa `Ctrl+P`.
+
 ### Atajos de teclado
 
 | Acción | Atajo |
@@ -78,7 +83,7 @@ Si el diagrama tiene un error, TotalMD lo muestra en un recuadro rojo con el mot
 | Vista / Editar / Dividido | `Ctrl+1` / `Ctrl+2` / `Ctrl+3` |
 | Mostrar u ocultar la barra lateral | `Ctrl+B` |
 | Buscar | `Ctrl+F` |
-| Imprimir o guardar como PDF | `Ctrl+P` |
+| Imprimir | `Ctrl+P` |
 | Agrandar / reducir / tamaño normal | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` |
 
 ## Actualizaciones

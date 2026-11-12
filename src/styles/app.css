@@ -344,6 +344,12 @@ kbd { font: 11px var(--font-ui); color: var(--fg-muted); }
 .modal-actions button { border: 1px solid var(--border); padding: 7px 14px; }
 .modal-actions button.primary { border-color: transparent; }
 
+.print-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg); color: var(--fg-muted); font-size: 15px;
+}
+
 #toast {
   position: fixed;
   left: 50%;

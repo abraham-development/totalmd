@@ -1,6 +1,6 @@
 // Exportación: HTML autónomo, PDF (impresión), y SVG/PNG por diagrama.
 import { save } from "@tauri-apps/plugin-dialog";
-import { isTauri, writeBinary, writeFile } from "../api";
+import { isTauri, writeBinary, writeFile, type PrintResult } from "../api";
 import { basename, dirname } from "../path";
 import { renderForRaster } from "../preview/mermaid";
 import previewCss from "../styles/preview.css?inline";
@@ -74,9 +74,96 @@ ${body.innerHTML}
   return path;
 }
 
-/** PDF: abre el diálogo de impresión de GTK («Imprimir a archivo» → PDF). */
-export function exportPdf(): void {
-  window.print();
+/** PDF directo: pide la ruta y genera el archivo (A4, estilo compacto de print.css). */
+export async function exportPdf(
+  docPath: string | null,
+  title: string,
+  print: (path: string) => Promise<PrintResult>,
+): Promise<{ path: string; pages: number | null } | null> {
+  const path = await askPath(suggested(docPath, title, "pdf"), "PDF", ["pdf"]);
+  if (!path) return null;
+  const { pages } = await print(path);
+  return { path, pages };
+}
+
+// Medidas de la página A4 impresa en px CSS (96 por pulgada), con los márgenes de print.rs.
+const MM = 96 / 25.4;
+const PAGE_W = (210 - 2 * 13) * MM; // ≈ 695 px
+const PAGE_H = (297 - 2 * 12) * MM; // ≈ 1032 px
+/** Los diagramas se dibujan para pantalla (texto ~16 px); al 80 % su texto iguala al del PDF (10 pt). */
+const DIAGRAM_SCALE = 0.8;
+/** Bloques que no conviene partir entre páginas si son cortos. */
+const KEEP_MAX_LINES = 25;
+
+/**
+ * Ajusta el documento a la página antes de imprimir: tamaño de los diagramas y qué bloques no
+ * deben partirse. Devuelve una función que deshace los cambios.
+ */
+export function fitForPage(root: HTMLElement): () => void {
+  const undo: (() => void)[] = [];
+  const mermaidOnly = root.classList.contains("mermaid-only");
+  root.querySelectorAll<SVGSVGElement>(".mermaid-svg svg").forEach((svg) => {
+    const vb = svg.viewBox.baseVal;
+    if (!vb?.width || !vb.height) return;
+    const scale = mermaidOnly
+      ? Math.min(1, PAGE_W / vb.width, (PAGE_H - 8) / vb.height)
+      : Math.min(DIAGRAM_SCALE, PAGE_W / vb.width, (PAGE_H * 0.6) / vb.height);
+    const prev = svg.style.width;
+    svg.style.width = `${Math.floor(vb.width * scale)}px`;
+    undo.push(() => (svg.style.width = prev));
+  });
+  // Imágenes: como los diagramas, al 80 % y sin pasar de ~40 % del alto de la página.
+  root.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (!w || !h) return;
+    const scale = Math.min(DIAGRAM_SCALE, PAGE_W / w, (PAGE_H * 0.4) / h);
+    const prev = [img.style.width, img.style.height];
+    img.style.width = `${Math.floor(w * scale)}px`;
+    img.style.height = `${Math.floor(h * scale)}px`;
+    undo.push(() => ([img.style.width, img.style.height] = prev));
+  });
+
+  const keep = (el: Element) => {
+    el.classList.add("pdf-keep");
+    undo.push(() => el.classList.remove("pdf-keep"));
+  };
+  root.querySelectorAll("pre").forEach((pre) => {
+    if ((pre.textContent ?? "").split("\n").length <= KEEP_MAX_LINES) keep(pre.closest(".code-wrap") ?? pre);
+  });
+  root.querySelectorAll("table").forEach((t) => {
+    if (t.rows.length <= KEEP_MAX_LINES) keep(t.closest(".table-wrap") ?? t);
+  });
+  // Un título (o una frase que presenta un bloque, «…:») no debe quedarse sola al final de una
+  // página. WebKit no respeta break-after: avoid, así que se agrupa con lo que sigue en un
+  // contenedor que no se parte. De abajo arriba, para encadenar «título → título → diagrama».
+  const group = (first: Element, next: Element) => {
+    const g = document.createElement("div");
+    g.className = "pdf-group";
+    first.before(g);
+    g.append(first, next);
+    undo.push(() => g.replaceWith(first, next));
+  };
+  [...root.querySelectorAll(":scope > p")].reverse().forEach((p) => {
+    const next = p.nextElementSibling;
+    const text = (p.textContent ?? "").trim();
+    if (next && text.length < 300 && (text.endsWith(":") || next.matches(".mermaid-block, .pdf-keep")) && isCompact(next)) group(p, next);
+  });
+  [...root.querySelectorAll(":scope > :is(h1, h2, h3, h4, h5, h6)")].reverse().forEach((h) => {
+    const next = h.nextElementSibling;
+    if (next && (isCompact(next) || next.matches("h1, h2, h3, h4, h5, h6"))) group(h, next);
+  });
+
+  // Se deshace en orden inverso (primero los grupos, luego clases y tamaños).
+  return () => undo.reverse().forEach((f) => f());
+}
+
+/** Bloques cortos que conviene mantener unidos a su título. */
+function isCompact(el: Element): boolean {
+  if (el.matches(".mermaid-block, .pdf-keep, .pdf-group, .katex-display, blockquote")) return true;
+  if (el.matches("p")) return (el.textContent ?? "").length < 600 || el.querySelector("img") !== null;
+  if (el.matches("ul, ol")) return el.querySelectorAll("li").length <= 8;
+  return false;
 }
 
 function svgMarkup(svg: SVGSVGElement): string {

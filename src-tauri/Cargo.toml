@@ -27,7 +27,7 @@ notify = "8"
 base64 = "0.22"
 tauri-plugin-updater = "2"
 tauri-plugin-process = "2"
-tokio = { version = "1", features = ["time"] }
+tokio = { version = "1", features = ["time", "sync"] }
 
 [profile.release]
 codegen-units = 1
@@ -36,8 +36,9 @@ opt-level = "s"
 panic = "abort"
 strip = true
 
-# Solo para capturas de depuración de la vista (TOTALMD_SNAPSHOT_DIR); ya forman parte del árbol de wry.
+# webkit2gtk/gtk: impresión y PDF (print.rs); gio/cairo: capturas de depuración (TOTALMD_SNAPSHOT_DIR). Ya forman parte del árbol de wry.
 [target.'cfg(target_os = "linux")'.dependencies]
 webkit2gtk = "2.0"
+gtk = "0.18"
 gio = "0.18"
 cairo-rs = { version = "0.18", features = ["png"] }

@@ -95,6 +95,25 @@ export async function setAsDefaultApp(): Promise<string> {
 }
 
 /** Captura de la vista web a PNG (solo si la app se lanzó con TOTALMD_SNAPSHOT_DIR). */
+export interface PrintResult {
+  done: boolean;
+  pages: number | null;
+}
+
+/** Con ruta: exporta el documento a PDF (A4) sin diálogo. Sin ruta: abre el diálogo de impresión. */
+export async function printDocument(pdfPath?: string): Promise<PrintResult> {
+  if (!isTauri) {
+    window.print();
+    return { done: true, pages: null };
+  }
+  return invoke<PrintResult>("print_document", { pdfPath: pdfPath ?? null });
+}
+
+/** Carpeta de capturas de la autoprueba (TOTALMD_SNAPSHOT_DIR), si está definida. */
+export async function snapshotDir(): Promise<string | null> {
+  return isTauri ? invoke<string | null>("snapshot_dir") : null;
+}
+
 export async function snapshot(name: string): Promise<void> {
   if (isTauri) await invoke("debug_snapshot", { name }).catch(() => {});
 }

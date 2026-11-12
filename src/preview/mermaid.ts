@@ -50,12 +50,28 @@ function cleanupStray(id: string): void {
   document.getElementById(`d${id}`)?.remove();
 }
 
+/**
+ * Contenedor fuera de pantalla con ancho fijo donde Mermaid mide y dibuja. Sin él usa un <div>
+ * temporal dentro de <body> (que es flex) y los diagramas que ocupan «todo el ancho», como
+ * Gantt, salen de ~18 px.
+ */
+let sandbox: HTMLElement | null = null;
+function renderSandbox(): HTMLElement {
+  if (!sandbox?.isConnected) {
+    sandbox = document.createElement("div");
+    sandbox.setAttribute("aria-hidden", "true");
+    sandbox.style.cssText = "position:absolute;left:-10000px;top:0;width:860px;visibility:hidden;pointer-events:none;";
+    document.body.append(sandbox);
+  }
+  return sandbox;
+}
+
 async function renderSource(src: string, config?: MermaidConfig): Promise<Cached> {
   const m = await getMermaid();
   const id = `mmd-${++idCounter}`;
   try {
     if (config) m.initialize({ ...baseConfig(), ...config });
-    const { svg } = await m.render(id, src);
+    const { svg } = await m.render(id, src, renderSandbox());
     return { ok: true, svg };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

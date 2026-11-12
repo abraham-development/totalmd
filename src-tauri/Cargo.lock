@@ -4397,6 +4397,7 @@ dependencies = [
  "base64 0.22.1",
  "cairo-rs",
  "gio",
+ "gtk",
  "notify",
  "serde",
  "serde_json",

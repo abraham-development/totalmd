@@ -20,7 +20,7 @@ import { renderDocument, countWords } from "./preview/render";
 import { renderMermaidBlocks, setMermaidTheme, type MermaidStats } from "./preview/mermaid";
 import { initScrollSync, rebuildAnchors, syncFromEditor, syncFromPreview, previewTopLine, scrollPreviewToLine } from "./preview/scrollSync";
 import { initSidebar, loadFolder, refreshTree, setActiveInTree, getRoot, showContextMenu, hideContextMenu } from "./sidebar/tree";
-import { exportHtml, exportPdf, exportSvg, exportPng } from "./export/export";
+import { exportHtml, exportPdf, exportSvg, exportPng, fitForPage } from "./export/export";
 import { askUnsaved, toast, openDiagramViewer } from "./ui/dialogs";
 import { initUpdater, checkForUpdate, installUpdate, dismissUpdate } from "./updater";
 import { settings, loadSettings, saveSetting, addRecent, removeRecent, clearRecent, type Mode } from "./state/settings";
@@ -506,6 +506,36 @@ function toggleTaskAt(li: HTMLElement): void {
   view.dispatch({ changes: { from: pos, to: pos + 1, insert: m[2] === " " ? "x" : " " } });
 }
 
+/**
+ * Prepara la vista para imprimir o exportar a PDF y ejecuta `fn`: siempre en tema claro (código y
+ * diagramas incluidos) y con los diagramas ajustados a la página. Una capa tapa el cambio de tema.
+ */
+async function withPrintLayout<T>(label: string, fn: () => Promise<T>): Promise<T> {
+  const overlay = document.createElement("div");
+  overlay.className = "print-overlay";
+  overlay.textContent = label;
+  document.body.append(overlay);
+  const wasDark = darkMode;
+  let restore = () => {};
+  try {
+    if (wasDark) {
+      document.documentElement.dataset.theme = "light";
+      setMermaidTheme("light");
+      await renderPreview();
+    } else if (previewStale) await renderPreview();
+    restore = fitForPage(preview);
+    await new Promise((r) => requestAnimationFrame(r));
+    return await fn();
+  } finally {
+    restore();
+    overlay.remove();
+    if (wasDark) {
+      darkMode = false; // fuerza a applyTheme a volver a renderizar en oscuro
+      await applyTheme();
+    }
+  }
+}
+
 async function copyText(text: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text);
@@ -647,10 +677,16 @@ async function runAction(action: string, el?: HTMLElement): Promise<void> {
         if (p) toast(`HTML exportado: ${basename(p)}`);
       }
       return;
-    case "export-pdf":
+    case "export-pdf": {
       if (!tab) return;
-      if (previewStale) await renderPreview();
-      return exportPdf();
+      const r = await exportPdf(tab.path, tabTitle(tab), (p) => withPrintLayout("Generando PDF…", () => api.printDocument(p)));
+      if (r) toast(`PDF exportado: ${basename(r.path)}${r.pages ? ` · ${r.pages} ${r.pages === 1 ? "página" : "páginas"}` : ""}`);
+      return;
+    }
+    case "print":
+      if (!tab) return;
+      await withPrintLayout("Imprimiendo…", () => api.printDocument());
+      return;
     case "reveal":
       if (tab?.path) await revealItemInDir(tab.path);
       return;
@@ -785,8 +821,6 @@ function bindEvents(): void {
   window.addEventListener("keydown", onKeyDown, true);
   window.addEventListener("blur", hideContextMenu);
   window.addEventListener("resize", hideContextMenu);
-  window.addEventListener("beforeprint", () => document.body.classList.add("printing"));
-  window.addEventListener("afterprint", () => document.body.classList.remove("printing"));
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => settings.theme === "system" && void applyTheme());
 }
 
@@ -818,7 +852,7 @@ function onKeyDown(e: KeyboardEvent): void {
       case "3": setMode("split"); break;
       case "e": if (tab) setMode(tab.mode === "view" ? "edit" : "view"); break;
       case "b": toggleSidebar(); break;
-      case "p": void runAction("export-pdf"); break;
+      case "p": void runAction("print"); break;
       case "f":
         if (tab?.mode === "view") openFind();
         else if (!getView().hasFocus) openFind();
@@ -950,6 +984,32 @@ async function runSelftest(): Promise<void> {
         await shot(`${i}-menu-recientes`);
         hideContextMenu();
       } else api.log("info", "SELFTEST   sin recientes para probar el menú");
+    }
+
+    // PDF (el primero con la app en tema oscuro: el PDF debe salir en claro).
+    const dir = await api.snapshotDir();
+    if (dir) {
+      const original = settings.theme;
+      if (i === 0) {
+        settings.theme = "dark";
+        await applyTheme();
+        await renderPreview();
+      }
+      const pdf = `${dir}/${i}-${basename(tab.path ?? "doc").replace(/\.[^.]+$/, "")}.pdf`;
+      const t1 = performance.now();
+      try {
+        const r = await withPrintLayout("Generando PDF…", () => {
+          const svgs = [...preview.querySelectorAll<SVGSVGElement>(".mermaid-svg svg")];
+          api.log("info", `SELFTEST   PDF anchos de diagrama: ${svgs.map((s) => s.style.width).join(" ")}`);
+          return api.printDocument(pdf);
+        });
+        api.log("info", `SELFTEST   PDF ${basename(pdf)}: ${r.pages ?? "?"} páginas · ${Math.round(performance.now() - t1)} ms · tema tras exportar=${document.documentElement.dataset.theme}`);
+      } catch (e) {
+        api.log("error", `SELFTEST   PDF falló: ${e}`);
+        failures++;
+      }
+      settings.theme = original;
+      await applyTheme();
     }
   }
   await api.exitApp(failures ? 1 : 0);

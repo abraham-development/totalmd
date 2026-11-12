@@ -1,4 +1,5 @@
 mod fs_cmds;
+mod print;
 mod updater;
 mod watcher;
 
@@ -124,6 +125,12 @@ const DEBUG_PROBE: &str = r#"
 "#;
 
 /// Captura PNG de la vista web (solo con TOTALMD_SNAPSHOT_DIR, para pruebas visuales).
+/// Carpeta de capturas de la autoprueba (TOTALMD_SNAPSHOT_DIR).
+#[tauri::command]
+fn snapshot_dir() -> Option<String> {
+    std::env::var("TOTALMD_SNAPSHOT_DIR").ok()
+}
+
 #[tauri::command]
 fn debug_snapshot(window: tauri::WebviewWindow, name: String) -> Result<(), String> {
     let Some(dir) = std::env::var_os("TOTALMD_SNAPSHOT_DIR") else { return Ok(()) };
@@ -204,6 +211,8 @@ pub fn run() {
             exit_app,
             set_as_default_app,
             debug_snapshot,
+            snapshot_dir,
+            print::print_document,
             updater::check_update,
             updater::install_update,
             fs_cmds::read_file,

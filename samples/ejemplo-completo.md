@@ -25,7 +25,7 @@ Este archivo prueba **todo** lo que TotalMD sabe mostrar: texto con *cursiva*, *
 | Vista              | `Ctrl+1`      |     ✅ |
 | Edición            | `Ctrl+2`      |     ✅ |
 | Dividido           | `Ctrl+3`      |     ✅ |
-| Exportar PDF       | `Ctrl+P`      |     ✅ |
+| Imprimir           | `Ctrl+P`      |     ✅ |
 
 - Lista con viñetas
   - Elemento anidado
