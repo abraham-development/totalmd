@@ -1,15 +1,15 @@
 {
-  "version": "0.2.2",
-  "notes": "Actualizaciones más fiables: reintentos automáticos y una segunda fuente para detectar versiones nuevas.",
-  "pub_date": "2026-11-09T05:39:34.777Z",
+  "version": "0.2.3",
+  "notes": "Quitar archivos de la barra lateral (Recientes) con clic derecho o con la ✕, sin borrarlos del disco. El clic derecho también permite mostrar el archivo en su carpeta y copiar su ruta.",
+  "pub_date": "2026-11-12T03:58:07.474Z",
   "platforms": {
     "linux-x86_64-deb": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSDNBczFpTU5vUjMzV1ZPeXRoaTkvTHgybzNrZ2lvR1oxcC9zaDFXRDloM2NxUWtHK1FTWEpNUFd3SUZEdmM2YllUS1piSC83T1dJTHlwa3hEdlYzenc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0MjAyNDM4CWZpbGU6VG90YWxNRF8wLjIuMl9hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMgo3MHEwbXNmbnlncGRybjRpWGx0bzhiVGFZT3dsTVJjbjNtelVNYnRURHFSY29idFpNSXhTQ1NEVzBWZTlRYWhsNjFYckdEQzVGdllhUVoxL2ZtYXpBUT09Cg==",
-      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.2/TotalMD_amd64.deb"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSHhaWFhEajdaRjlXWCtkWUtMeld5RTNDYVdGU293Z0FxYjNVOFkzRXVDeXY5OWVXa3A2TXNBeG8zV0pjMWlSMUE1UlVoN2dvcEltVFdXdXN6UzRhS3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDU1ODgxCWZpbGU6VG90YWxNRF8wLjIuM19hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMwpLaE1GV2JmbGZBNm0vem9rV0d3b0tPdkU1UGxZTnZvL0hTVnFzUVJodGZ5aTd1TG13eEdZOFI1K2ExdzR5MWI5L2xReWdPbDd4S0Z6S3BDZDQ1bkdBQT09Cg==",
+      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.3/TotalMD_0.2.3_amd64.deb"
     },
     "linux-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSDNBczFpTU5vUjMzV1ZPeXRoaTkvTHgybzNrZ2lvR1oxcC9zaDFXRDloM2NxUWtHK1FTWEpNUFd3SUZEdmM2YllUS1piSC83T1dJTHlwa3hEdlYzenc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0MjAyNDM4CWZpbGU6VG90YWxNRF8wLjIuMl9hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMgo3MHEwbXNmbnlncGRybjRpWGx0bzhiVGFZT3dsTVJjbjNtelVNYnRURHFSY29idFpNSXhTQ1NEVzBWZTlRYWhsNjFYckdEQzVGdllhUVoxL2ZtYXpBUT09Cg==",
-      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.2/TotalMD_amd64.deb"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUZEc0UEV5Si9rSHhaWFhEajdaRjlXWCtkWUtMeld5RTNDYVdGU293Z0FxYjNVOFkzRXVDeXY5OWVXa3A2TXNBeG8zV0pjMWlSMUE1UlVoN2dvcEltVFdXdXN6UzRhS3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NDU1ODgxCWZpbGU6VG90YWxNRF8wLjIuM19hbWQ2NC5kZWIJdmVyc2lvbjowLjIuMwpLaE1GV2JmbGZBNm0vem9rV0d3b0tPdkU1UGxZTnZvL0hTVnFzUVJodGZ5aTd1TG13eEdZOFI1K2ExdzR5MWI5L2xReWdPbDd4S0Z6S3BDZDQ1bkdBQT09Cg==",
+      "url": "https://github.com/abraham-development/totalmd/releases/download/v0.2.3/TotalMD_0.2.3_amd64.deb"
     }
   }
 }
